@@ -1,7 +1,8 @@
 # simple-optics
 A simple library for Lenses (and Views and OptionalLenses and OptionalViews) in Java
 
-"A lens is basically a getter/setter that can be used for deep updates of immutable data." http://davids-code.blogspot.de/2014/02/immutable-domain-and-lenses-in-java-8.html
+"A lens is basically a getter/setter that can be used for deep updates of immutable data." http://davids-code.blogspot.de/2014/02/immutable-domain-and-lenses-in-java-8.html 
+(Disclaimer: I am *not* the author of this post)
 
 There are a couple of excellent Optics libraries in Functional Programming world. However to use these constructs in Java, 
 you would usually have to use some larger framework or library, which in turn introduces more dependencies and generally 
