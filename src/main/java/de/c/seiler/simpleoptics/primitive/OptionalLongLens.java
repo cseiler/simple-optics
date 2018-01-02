@@ -63,22 +63,22 @@ public class OptionalLongLens<A> extends OptionalLongView<A>
     return set(a, f.apply(getAsLong(a)));
   }
 
-  public <C> OptionalLongLens<C> compose(final Lens<C, A> that)
+  public <C> OptionalLongLens<C> compose(final Lens<C, A> before)
   {
     return new OptionalLongLens<C>(
-        c -> c.isPresent()?getAsLong(that.get(c.get())):OptionalLong.empty(),
+        c -> c.isPresent()?getAsLong(before.get(c.get())):OptionalLong.empty(),
         (c, b) -> c.flatMap(c2 -> {
           if (b.isPresent())
             return Optional
-                .of(that.mod(c2, a -> set(a, b.getAsLong()).orElseThrow(NoSuchElementException::new)));
+                .of(before.mod(c2, a -> set(a, b.getAsLong()).orElseThrow(NoSuchElementException::new)));
           return Optional.empty();
         }));
   }
 
-  public <C> OptionalLongLens<C> compose(final OptionalLens<C, A> that)
+  public <C> OptionalLongLens<C> compose(final OptionalLens<C, A> before)
   {
     return new OptionalLongLens<C>(
-        c -> getAsLong(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> getAsLong(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 }

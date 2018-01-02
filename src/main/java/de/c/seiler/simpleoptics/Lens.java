@@ -38,18 +38,18 @@ public class Lens<A, B> extends View<A, B>
     return set(a, f.apply(get(a)));
   }
 
-  public <C> Lens<C, B> compose(final Lens<C, A> that)
+  public <C> Lens<C, B> compose(final Lens<C, A> before)
   {
     return new Lens<C, B>(
-        c -> get(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> get(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 
-  public <C> OptionalLens<C, B> compose(final OptionalLens<C, A> that)
+  public <C> OptionalLens<C, B> compose(final OptionalLens<C, A> before)
   {
     return new OptionalLens<C, B>(
-        c -> that.get(c).map(c1 -> get(c1)),
-        (c, b) -> b.flatMap(b1 -> that.mod(c, a -> a.map(a1 -> set(a1, b1)))));
+        c -> before.get(c).map(c1 -> get(c1)),
+        (c, b) -> b.flatMap(b1 -> before.mod(c, a -> a.map(a1 -> set(a1, b1)))));
   }
 
   public <C> Lens<A, C> andThen(Lens<B, C> that)

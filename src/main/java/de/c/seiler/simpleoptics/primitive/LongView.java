@@ -29,17 +29,17 @@ public class LongView<A> extends View<A, Long>
     return fgetLong.applyAsLong(a);
   }
 
-  public <C> LongView<C> compose(final View<C, A> that)
+  public <C> LongView<C> compose(final View<C, A> before)
   {
     return new LongView<C>(
-        c -> getAsLong(that.get(c)));
+        c -> getAsLong(before.get(c)));
   }
 
-  public <C> OptionalLongView<C> compose(final OptionalView<C, A> that)
+  public <C> OptionalLongView<C> compose(final OptionalView<C, A> before)
   {
     return new OptionalLongView<C>(
         c -> {
-          Optional<A> oa = that.get(c);
+          Optional<A> oa = before.get(c);
           return oa.isPresent()?OptionalLong.of(getAsLong(oa.get())):OptionalLong.empty();
         });
   }

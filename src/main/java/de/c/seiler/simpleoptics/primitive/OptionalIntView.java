@@ -43,16 +43,16 @@ public class OptionalIntView<A> extends OptionalView<A, Integer>
     return fgetInt.apply(Optional.ofNullable(a));
   }
 
-  public <C> OptionalIntView<C> compose(final View<C, A> that)
+  public <C> OptionalIntView<C> compose(final View<C, A> before)
   {
     return new OptionalIntView<C>(
-        oc -> oc.isPresent()?getAsInt(that.get(oc.get())):OptionalInt.empty());
+        oc -> oc.isPresent()?getAsInt(before.get(oc.get())):OptionalInt.empty());
   }
 
-  public <C> OptionalIntView<C> compose(final OptionalView<C, A> that)
+  public <C> OptionalIntView<C> compose(final OptionalView<C, A> before)
   {
     return new OptionalIntView<C>(
-        oc -> oc.isPresent()?getAsInt(that.get(oc.get())):OptionalInt.empty());
+        oc -> oc.isPresent()?getAsInt(before.get(oc.get())):OptionalInt.empty());
   }
 
 }

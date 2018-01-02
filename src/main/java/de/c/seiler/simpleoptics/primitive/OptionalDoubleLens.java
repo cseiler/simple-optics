@@ -63,22 +63,22 @@ public class OptionalDoubleLens<A> extends OptionalDoubleView<A>
     return set(a, f.apply(getAsDouble(a)));
   }
 
-  public <C> OptionalDoubleLens<C> compose(final Lens<C, A> that)
+  public <C> OptionalDoubleLens<C> compose(final Lens<C, A> before)
   {
     return new OptionalDoubleLens<C>(
-        c -> c.isPresent()?getAsDouble(that.get(c.get())):OptionalDouble.empty(),
+        c -> c.isPresent()?getAsDouble(before.get(c.get())):OptionalDouble.empty(),
         (c, b) -> c.flatMap(c2 -> {
           if (b.isPresent())
             return Optional
-                .of(that.mod(c2, a -> set(a, b.getAsDouble()).orElseThrow(NoSuchElementException::new)));
+                .of(before.mod(c2, a -> set(a, b.getAsDouble()).orElseThrow(NoSuchElementException::new)));
           return Optional.empty();
         }));
   }
 
-  public <C> OptionalDoubleLens<C> compose(final OptionalLens<C, A> that)
+  public <C> OptionalDoubleLens<C> compose(final OptionalLens<C, A> before)
   {
     return new OptionalDoubleLens<C>(
-        c -> getAsDouble(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> getAsDouble(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 }

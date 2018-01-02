@@ -29,17 +29,17 @@ public class IntView<A> extends View<A, Integer>
     return fgetInt.applyAsInt(a);
   }
 
-  public <C> IntView<C> compose(final View<C, A> that)
+  public <C> IntView<C> compose(final View<C, A> before)
   {
     return new IntView<C>(
-        c -> getAsInt(that.get(c)));
+        c -> getAsInt(before.get(c)));
   }
 
-  public <C> OptionalIntView<C> compose(final OptionalView<C, A> that)
+  public <C> OptionalIntView<C> compose(final OptionalView<C, A> before)
   {
     return new OptionalIntView<C>(
         c -> {
-          Optional<A> oa = that.get(c);
+          Optional<A> oa = before.get(c);
           return oa.isPresent()?OptionalInt.of(getAsInt(oa.get())):OptionalInt.empty();
         });
   }

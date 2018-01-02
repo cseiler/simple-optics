@@ -36,23 +36,23 @@ public class IntLens<A> extends IntView<A>
     return set(a, f.applyAsInt(getAsInt(a)));
   }
 
-  public <C> IntLens<C> compose(final Lens<C, A> that)
+  public <C> IntLens<C> compose(final Lens<C, A> before)
   {
     return new IntLens<C>(
-        c -> getAsInt(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> getAsInt(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 
-  public <C> OptionalIntLens<C> compose(final OptionalLens<C, A> that)
+  public <C> OptionalIntLens<C> compose(final OptionalLens<C, A> before)
   {
     return new OptionalIntLens<C>(
         c -> {
-          Optional<A> oa = that.get(c);
+          Optional<A> oa = before.get(c);
           return oa.isPresent()?OptionalInt.of(getAsInt(oa.get())):OptionalInt.empty();
         },
         (c, b) -> {
           if (b.isPresent())
-            return that.mod(c, a -> a.map(a0 -> set(a0, b.getAsInt())));
+            return before.mod(c, a -> a.map(a0 -> set(a0, b.getAsInt())));
           return Optional.empty();
         });
   }

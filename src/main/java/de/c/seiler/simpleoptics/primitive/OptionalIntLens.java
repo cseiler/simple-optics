@@ -63,22 +63,22 @@ public class OptionalIntLens<A> extends OptionalIntView<A>
     return set(a, f.apply(getAsInt(a)));
   }
 
-  public <C> OptionalIntLens<C> compose(final Lens<C, A> that)
+  public <C> OptionalIntLens<C> compose(final Lens<C, A> before)
   {
     return new OptionalIntLens<C>(
-        c -> c.isPresent()?getAsInt(that.get(c.get())):OptionalInt.empty(),
+        c -> c.isPresent()?getAsInt(before.get(c.get())):OptionalInt.empty(),
         (c, b) -> c.flatMap(c2 -> {
           if (b.isPresent())
             return Optional
-                .of(that.mod(c2, a -> set(a, b.getAsInt()).orElseThrow(NoSuchElementException::new)));
+                .of(before.mod(c2, a -> set(a, b.getAsInt()).orElseThrow(NoSuchElementException::new)));
           return Optional.empty();
         }));
   }
 
-  public <C> OptionalIntLens<C> compose(final OptionalLens<C, A> that)
+  public <C> OptionalIntLens<C> compose(final OptionalLens<C, A> before)
   {
     return new OptionalIntLens<C>(
-        c -> getAsInt(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> getAsInt(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 }

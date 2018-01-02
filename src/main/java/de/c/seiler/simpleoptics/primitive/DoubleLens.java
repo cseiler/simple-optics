@@ -36,23 +36,23 @@ public class DoubleLens<A> extends DoubleView<A>
     return set(a, f.applyAsDouble(getAsDouble(a)));
   }
 
-  public <C> DoubleLens<C> compose(final Lens<C, A> that)
+  public <C> DoubleLens<C> compose(final Lens<C, A> before)
   {
     return new DoubleLens<C>(
-        c -> getAsDouble(that.get(c)),
-        (c, b) -> that.mod(c, a -> set(a, b)));
+        c -> getAsDouble(before.get(c)),
+        (c, b) -> before.mod(c, a -> set(a, b)));
   }
 
-  public <C> OptionalDoubleLens<C> compose(final OptionalLens<C, A> that)
+  public <C> OptionalDoubleLens<C> compose(final OptionalLens<C, A> before)
   {
     return new OptionalDoubleLens<C>(
         c -> {
-          Optional<A> oa = that.get(c);
+          Optional<A> oa = before.get(c);
           return oa.isPresent()?OptionalDouble.of(getAsDouble(oa.get())):OptionalDouble.empty();
         },
         (c, b) -> {
           if (b.isPresent())
-            return that.mod(c, a -> a.map(a0 -> set(a0, b.getAsDouble())));
+            return before.mod(c, a -> a.map(a0 -> set(a0, b.getAsDouble())));
           return Optional.empty();
         });
   }
