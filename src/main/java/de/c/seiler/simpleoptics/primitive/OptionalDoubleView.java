@@ -44,16 +44,16 @@ public class OptionalDoubleView<A> extends OptionalView<A, Double>
     return fgetDouble.apply(Optional.ofNullable(a));
   }
 
-  public <C> OptionalDoubleView<C> compose(final View<C, A> before)
+  public <C> OptionalDoubleView<C> compose(final View<C, A> that)
   {
     return new OptionalDoubleView<C>(
-        oc -> oc.isPresent()?getAsDouble(before.get(oc.get())):OptionalDouble.empty());
+        oc -> oc.isPresent()?getAsDouble(that.get(oc.get())):OptionalDouble.empty());
   }
 
-  public <C> OptionalDoubleView<C> compose(final OptionalView<C, A> before)
+  public <C> OptionalDoubleView<C> compose(final OptionalView<C, A> that)
   {
     return new OptionalDoubleView<C>(
-        oc -> oc.isPresent()?getAsDouble(before.get(oc.get())):OptionalDouble.empty());
+        oc -> oc.isPresent()?getAsDouble(that.get(oc.get())):OptionalDouble.empty());
   }
 
 }

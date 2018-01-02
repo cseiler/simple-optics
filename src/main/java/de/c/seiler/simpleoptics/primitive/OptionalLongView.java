@@ -43,16 +43,16 @@ public class OptionalLongView<A> extends OptionalView<A, Long>
     return fgetLong.apply(Optional.ofNullable(a));
   }
 
-  public <C> OptionalLongView<C> compose(final View<C, A> before)
+  public <C> OptionalLongView<C> compose(final View<C, A> that)
   {
     return new OptionalLongView<C>(
-        oc -> oc.isPresent()?getAsLong(before.get(oc.get())):OptionalLong.empty());
+        oc -> oc.isPresent()?getAsLong(that.get(oc.get())):OptionalLong.empty());
   }
 
-  public <C> OptionalLongView<C> compose(final OptionalView<C, A> before)
+  public <C> OptionalLongView<C> compose(final OptionalView<C, A> that)
   {
     return new OptionalLongView<C>(
-        oc -> oc.isPresent()?getAsLong(before.get(oc.get())):OptionalLong.empty());
+        oc -> oc.isPresent()?getAsLong(that.get(oc.get())):OptionalLong.empty());
   }
 
 }

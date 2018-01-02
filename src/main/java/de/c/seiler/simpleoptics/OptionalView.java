@@ -13,7 +13,7 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class OptionalView<A, B> implements Function<A, Optional<B>>
+public class OptionalView<A, B>
 {
 
   public final Function<Optional<A>, Optional<B>> fget;
@@ -28,11 +28,6 @@ public class OptionalView<A, B> implements Function<A, Optional<B>>
     this.fget = fget;
   }
 
-  @Override
-  public Optional<B> apply(A a) {
-  	return get(a);
-  }
-
   public Optional<B> get(Optional<A> a)
   {
     return fget.apply(a);
@@ -43,16 +38,16 @@ public class OptionalView<A, B> implements Function<A, Optional<B>>
     return fget.apply(Optional.ofNullable(a));
   }
 
-  public <C> OptionalView<C, B> compose(final View<C, A> before)
+  public <C> OptionalView<C, B> compose(final View<C, A> that)
   {
     return new OptionalView<C, B>(
-        c -> c.flatMap(c1 -> get(before.get(c1))));
+        c -> c.flatMap(c1 -> get(that.get(c1))));
   }
 
-  public <C> OptionalView<C, B> compose(final OptionalView<C, A> before)
+  public <C> OptionalView<C, B> compose(final OptionalView<C, A> that)
   {
     return new OptionalView<C, B>(
-        c -> get(before.get(c)));
+        c -> get(that.get(c)));
   }
 
   public <C> OptionalView<A, C> andThen(OptionalView<B, C> that)
@@ -79,6 +74,5 @@ public class OptionalView<A, B> implements Function<A, Optional<B>>
   {
     return that.compose(this);
   }
-
 
 }

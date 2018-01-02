@@ -29,17 +29,17 @@ public class DoubleView<A> extends View<A, Double>
     return fgetDouble.applyAsDouble(a);
   }
 
-  public <C> DoubleView<C> compose(final View<C, A> before)
+  public <C> DoubleView<C> compose(final View<C, A> that)
   {
     return new DoubleView<C>(
-        c -> getAsDouble(before.get(c)));
+        c -> getAsDouble(that.get(c)));
   }
 
-  public <C> OptionalDoubleView<C> compose(final OptionalView<C, A> before)
+  public <C> OptionalDoubleView<C> compose(final OptionalView<C, A> that)
   {
     return new OptionalDoubleView<C>(
         c -> {
-          Optional<A> oa = before.get(c);
+          Optional<A> oa = that.get(c);
           return oa.isPresent()?OptionalDouble.of(getAsDouble(oa.get())):OptionalDouble.empty();
         });
   }

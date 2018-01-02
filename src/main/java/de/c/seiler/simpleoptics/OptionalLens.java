@@ -65,18 +65,18 @@ public class OptionalLens<A, B> extends OptionalView<A, B>
     return set(a, f.apply(get(a)));
   }
 
-  public <C> OptionalLens<C, B> compose(final Lens<C, A> before)
+  public <C> OptionalLens<C, B> compose(final Lens<C, A> that)
   {
     return new OptionalLens<C, B>(
-        c -> c.flatMap(c1 -> get(before.get(c1))),
-        (c, b) -> c.flatMap(c2 -> b.map(b1 -> before.mod(c2, a -> set(a, b1).orElseThrow(NullPointerException::new)))));
+        c -> c.flatMap(c1 -> get(that.get(c1))),
+        (c, b) -> c.flatMap(c2 -> b.map(b1 -> that.mod(c2, a -> set(a, b1).orElseThrow(NullPointerException::new)))));
   }
 
-  public <C> OptionalLens<C, B> compose(final OptionalLens<C, A> before)
+  public <C> OptionalLens<C, B> compose(final OptionalLens<C, A> that)
   {
     return new OptionalLens<C, B>(
-        c -> get(before.get(c)),
-        (c, b) -> before.mod(c, a -> set(a, b)));
+        c -> get(that.get(c)),
+        (c, b) -> that.mod(c, a -> set(a, b)));
   }
 
   public <C> OptionalLens<A, C> andThen(OptionalLens<B, C> that)
