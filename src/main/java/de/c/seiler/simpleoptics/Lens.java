@@ -62,32 +62,32 @@ public class Lens<A, B> extends View<A, B>
     return that.compose(this);
   }
 
-  public <C> IntLens<A> andThen(IntLens<B> that)
+  public IntLens<A> andThen(IntLens<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> OptionalIntLens<A> andThen(OptionalIntLens<B> that)
+  public OptionalIntLens<A> andThen(OptionalIntLens<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> LongLens<A> andThen(LongLens<B> that)
+  public LongLens<A> andThen(LongLens<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> OptionalLongLens<A> andThen(OptionalLongLens<B> that)
+  public OptionalLongLens<A> andThen(OptionalLongLens<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> DoubleLens<A> andThen(DoubleLens<B> that)
+  public DoubleLens<A> andThen(DoubleLens<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> OptionalDoubleLens<A> andThen(OptionalDoubleLens<B> that)
+  public OptionalDoubleLens<A> andThen(OptionalDoubleLens<B> that)
   {
     return that.compose(this);
   }

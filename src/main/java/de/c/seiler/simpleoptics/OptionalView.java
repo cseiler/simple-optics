@@ -3,6 +3,9 @@ package de.c.seiler.simpleoptics;
 import java.util.Optional;
 import java.util.function.Function;
 
+import de.c.seiler.simpleoptics.primitive.DoubleStreamView;
+import de.c.seiler.simpleoptics.primitive.IntStreamView;
+import de.c.seiler.simpleoptics.primitive.LongStreamView;
 import de.c.seiler.simpleoptics.primitive.OptionalDoubleView;
 import de.c.seiler.simpleoptics.primitive.OptionalIntView;
 import de.c.seiler.simpleoptics.primitive.OptionalLongView;
@@ -13,7 +16,7 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class OptionalView<A, B>
+public class OptionalView<A, B> implements Function<Optional<A>, Optional<B>>
 {
 
   public final Function<Optional<A>, Optional<B>> fget;
@@ -33,6 +36,12 @@ public class OptionalView<A, B>
     return fget.apply(a);
   }
 
+  @Override
+  public Optional<B> apply(Optional<A> a)
+  {
+    return get(a);
+  }
+
   public Optional<B> get(A a)
   {
     return fget.apply(Optional.ofNullable(a));
@@ -40,14 +49,12 @@ public class OptionalView<A, B>
 
   public <C> OptionalView<C, B> compose(final View<C, A> that)
   {
-    return new OptionalView<C, B>(
-        c -> c.flatMap(c1 -> get(that.get(c1))));
+    return new OptionalView<C, B>(c -> c.flatMap(c1 -> get(that.get(c1))));
   }
 
   public <C> OptionalView<C, B> compose(final OptionalView<C, A> that)
   {
-    return new OptionalView<C, B>(
-        c -> get(that.get(c)));
+    return new OptionalView<C, B>(c -> get(that.get(c)));
   }
 
   public <C> OptionalView<A, C> andThen(OptionalView<B, C> that)
@@ -60,19 +67,40 @@ public class OptionalView<A, B>
     return that.compose(this);
   }
 
-  public <C> OptionalIntView<A> andThen(OptionalIntView<B> that)
+  public OptionalIntView<A> andThen(OptionalIntView<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> OptionalLongView<A> andThen(OptionalLongView<B> that)
+  public OptionalLongView<A> andThen(OptionalLongView<B> that)
   {
     return that.compose(this);
   }
 
-  public <C> OptionalDoubleView<A> andThen(OptionalDoubleView<B> that)
+  public OptionalDoubleView<A> andThen(OptionalDoubleView<B> that)
   {
     return that.compose(this);
   }
 
+  public <C> OptionalStreamView<A, C> andThen(StreamView<B, C> that)
+  {
+    return that.composeFlatMap(this);
+  }
+
+  public IntStreamView<A> andThen(IntStreamView<B> that)
+  {
+    return that.composeFlatMap(this);
+  }
+
+  public LongStreamView<A> andThen(LongStreamView<B> that)
+  {
+    return that.composeFlatMap(this);
+  }
+
+  public DoubleStreamView<A> andThen(DoubleStreamView<B> that)
+  {
+    return that.composeFlatMap(this);
+  }
+
+  
 }
