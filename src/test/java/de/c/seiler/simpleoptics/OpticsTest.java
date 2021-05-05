@@ -8,9 +8,6 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import de.c.seiler.simpleoptics.Lens;
-import de.c.seiler.simpleoptics.OptionalLens;
-import de.c.seiler.simpleoptics.View;
 import de.c.seiler.testdomain.Car;
 import de.c.seiler.testdomain.CarMaker;
 import de.c.seiler.testdomain.Material;
