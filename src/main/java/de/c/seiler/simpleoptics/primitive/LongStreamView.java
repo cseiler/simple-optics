@@ -17,38 +17,29 @@ import de.c.seiler.simpleoptics.View;
  * @param <A>
  * @param <B>
  */
-public class LongStreamView<A> extends View<A, LongStream>
-{
+public class LongStreamView<A> extends View<A, LongStream> {
 
-  public LongStreamView(Function<A, LongStream> fget)
-  {
-    super(fget);
-  }
+	public LongStreamView(Function<A, LongStream> fget) {
+		super(fget);
+	}
 
-  public <C> LongStreamView<C> compose(final View<C, A> that)
-  {
-    return new LongStreamView<C>(c -> get(that.get(c)));
-  }
+	public <C> LongStreamView<C> compose(final View<C, A> that) {
+		return new LongStreamView<C>(c -> get(that.get(c)));
+	}
 
-  public <C> LongStreamView<C> composeFlatMap(final OptionalView<C, A> that)
-  {
-    return new LongStreamView<C>(c -> {
-      Optional<A> oa = that.get(c);
-      return oa.isPresent()?get(oa.get()):LongStream.empty();
-    });
-  }
+	public <C> LongStreamView<C> composeFlatMap(final OptionalView<C, A> that) {
+		return new LongStreamView<C>(c -> {
+			Optional<A> oa = that.get(c);
+			return oa.isPresent() ? get(oa.get()) : LongStream.empty();
+		});
+	}
 
-  public <C> LongStreamView<C> composeFlatMap(final StreamView<C, A> that)
-  {
-    return new LongStreamView<C>(c -> that.get(c).flatMapToLong(fget));
-  }
+	public <C> LongStreamView<C> composeFlatMap(final StreamView<C, A> that) {
+		return new LongStreamView<C>(c -> that.get(c).flatMapToLong(fget));
+	}
 
-  public <C> OptionalLongStreamView<C> composeFlatMap(OptionalStreamView<C, A> that)
-  {
-    return new OptionalLongStreamView<C>(c -> c
-        .flatMap(cc -> that.get(cc)
-            .map(sa -> sa
-                .flatMapToLong(fget))));
-  }
+	public <C> OptionalLongStreamView<C> composeFlatMap(OptionalStreamView<C, A> that) {
+		return new OptionalLongStreamView<C>(c -> c.flatMap(cc -> that.get(cc).map(sa -> sa.flatMapToLong(fget))));
+	}
 
 }
