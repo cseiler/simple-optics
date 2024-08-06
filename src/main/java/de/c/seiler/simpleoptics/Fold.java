@@ -1,6 +1,5 @@
 package de.c.seiler.simpleoptics;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -17,9 +16,9 @@ import java.util.stream.Stream;
  */
 public class Fold<A, B> {
 
-	private Function<A, Collection<B>> fcol;
+	private Function<A, List<B>> fcol;
 
-	public Fold(Function<A, Collection<B>> fcol) {
+	public Fold(Function<A, List<B>> fcol) {
 		this.fcol = fcol;
 	}
 
@@ -28,14 +27,14 @@ public class Fold<A, B> {
 	}
 
 	public List<B> toList(A a) {
-		return List.copyOf(fcol.apply(a));
+		return fcol.apply(a);
 	}
 
-	public <D, C extends Collection<D>, ACC> Fold<A, D> fold(Collector<B, ACC, C> collector) {
+	public <D, E extends List<D>, ACC> Fold<A, D> fold(Collector<B, ACC, E> collector) {
 		return new Fold<>(a -> toStream(a).collect(collector));
 	}
 
-	public <C> Fold<A, C> each(View<B, C> v) {
+	public <D> Fold<A, D> each(View<B, D> v) {
 		return new Fold<>(a -> toStream(a).map(v).toList());
 	}
 

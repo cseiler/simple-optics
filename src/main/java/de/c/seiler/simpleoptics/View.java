@@ -3,11 +3,8 @@ package de.c.seiler.simpleoptics;
 import java.util.List;
 import java.util.function.Function;
 
-import de.c.seiler.simpleoptics.primitive.DoubleStreamView;
 import de.c.seiler.simpleoptics.primitive.DoubleView;
-import de.c.seiler.simpleoptics.primitive.IntStreamView;
 import de.c.seiler.simpleoptics.primitive.IntView;
-import de.c.seiler.simpleoptics.primitive.LongStreamView;
 import de.c.seiler.simpleoptics.primitive.LongView;
 import de.c.seiler.simpleoptics.primitive.OptionalDoubleView;
 import de.c.seiler.simpleoptics.primitive.OptionalIntView;
@@ -21,22 +18,10 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class View<A, B> extends Fold<A,B> implements Function<A, B> {
-
-	public final Function<A, B> fget;
+public class View<A, B> extends BaseView<A, B, B> {
 
 	public View(Function<A, B> fget) {
-		super(fget.andThen(List::of));
-		this.fget = fget;
-	}
-
-	@Override
-	public B apply(A a) {
-		return get(a);
-	}
-
-	public B get(A a) {
-		return fget.apply(a);
+		super(fget, fget.andThen(List::of));
 	}
 
 	public <C> View<C, B> compose(final View<C, A> that) {
@@ -45,26 +30,6 @@ public class View<A, B> extends Fold<A,B> implements Function<A, B> {
 
 	public <C> OptionalView<C, B> compose(final OptionalView<C, A> that) {
 		return new OptionalView<C, B>(c -> that.get(c).map(c1 -> get(c1)));
-	}
-
-	public <C> StreamView<C, B> compose(final StreamView<C, A> that) {
-		return new StreamView<C, B>(c -> that.get(c).map(fget));
-	}
-
-	public <C> StreamView<A, C> andThen(StreamView<B, C> that) {
-		return that.compose(this);
-	}
-
-	public IntStreamView<A> andThen(IntStreamView<B> that) {
-		return that.compose(this);
-	}
-
-	public LongStreamView<A> andThen(LongStreamView<B> that) {
-		return that.compose(this);
-	}
-
-	public DoubleStreamView<A> andThen(DoubleStreamView<B> that) {
-		return that.compose(this);
 	}
 
 	public <C> View<A, C> andThen(View<B, C> that) {
@@ -99,4 +64,7 @@ public class View<A, B> extends Fold<A,B> implements Function<A, B> {
 		return that.compose(this);
 	}
 
+	public <C> ListView<A, C> andThen(ListView<B, C> that) {
+		return that.compose(this);
+	}
 }

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import de.c.seiler.simpleoptics.primitive.DoubleStreamView;
-import de.c.seiler.simpleoptics.primitive.IntStreamView;
-import de.c.seiler.simpleoptics.primitive.LongStreamView;
 import de.c.seiler.simpleoptics.primitive.OptionalDoubleView;
 import de.c.seiler.simpleoptics.primitive.OptionalIntView;
 import de.c.seiler.simpleoptics.primitive.OptionalLongView;
@@ -72,22 +69,6 @@ public class OptionalView<A, B> extends Fold<A, B> implements Function<Optional<
 
 	public OptionalDoubleView<A> andThen(OptionalDoubleView<B> that) {
 		return that.compose(this);
-	}
-
-	public <C> OptionalStreamView<A, C> andThen(StreamView<B, C> that) {
-		return that.composeFlatMap(this);
-	}
-
-	public IntStreamView<A> andThen(IntStreamView<B> that) {
-		return that.composeFlatMap(this);
-	}
-
-	public LongStreamView<A> andThen(LongStreamView<B> that) {
-		return that.composeFlatMap(this);
-	}
-
-	public DoubleStreamView<A> andThen(DoubleStreamView<B> that) {
-		return that.composeFlatMap(this);
 	}
 
 }
