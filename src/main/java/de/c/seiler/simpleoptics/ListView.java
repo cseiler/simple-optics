@@ -11,10 +11,21 @@ import java.util.function.Function;
  * @param <A>
  * @param <B>
  */
-public class ListView<A, C> extends Fold<A, List<C>, C> {
+public class ListView<A, C> extends Fold<A, C>  implements Function<A, List<C>> {
 
-	public ListView(Function<A, List<C>> fcol) {
-		super(fcol, fcol);
+	private Function<A, List<C>> fget;
+
+	public ListView(Function<A, List<C>> flget) {
+		super(flget);
+		this.fget = flget;
+	}
+	
+	public List<C> apply(A a) {
+		return fget.apply(a);
+	}
+
+	public List<C> get(A a) {
+		return apply(a);
 	}
 
 	public <D> ListView<D, C> compose(final View<D, A> that) {

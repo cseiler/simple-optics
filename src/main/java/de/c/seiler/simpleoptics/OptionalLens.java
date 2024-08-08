@@ -24,7 +24,7 @@ public class OptionalLens<A, B> extends OptionalView<A, B> {
 	public final BiFunction<Optional<A>, Optional<B>, Optional<A>> fset;
 
 	public OptionalLens(Lens<A, B> lens) {
-		super(oa -> oa.flatMap(a -> Optional.ofNullable(lens.fget.apply(a))));
+		super(oa -> oa.flatMap(a -> Optional.ofNullable(lens.apply(a))));
 		this.fset = (oa, ob) -> oa.flatMap(
 				a -> ob.isPresent() ? ob.map(b -> lens.fset.apply(a, b)) : Optional.of(lens.fset.apply(a, null)));
 	}

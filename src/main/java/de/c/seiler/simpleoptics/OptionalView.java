@@ -15,25 +15,28 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class OptionalView<A, B> extends Fold<Optional<A>, Optional<B>, B> {
+public class OptionalView<A, B> extends Fold<Optional<A>, B> implements Function<Optional<A>, Optional<B>> {
 
+
+	private Function<Optional<A>, Optional<B>> fget;
 
 	public OptionalView(View<A, B> view) {
-		super(oa -> oa.flatMap(a -> Optional.ofNullable(view.fget.apply(a))), 
-				oa -> oa.map(a -> view.fget.apply(a)).or(Optional::empty).stream().toList());
+		super(oa -> oa.map(a -> view.apply(a)).or(Optional::empty).stream().toList());
+		this.fget = oa -> oa.map(a -> view.apply(a));
 	}
 
 	public OptionalView(Function<Optional<A>, Optional<B>> fget) {
-		super(fget, a -> fget.apply(a).stream().toList());
+		super(a -> fget.apply(a).stream().toList());
+		this.fget = fget;
 	}
 
 	public Optional<B> get(Optional<A> a) {
-		return fget.apply(a);
+		return apply(a);
 	}
 
 	@Override
 	public Optional<B> apply(Optional<A> a) {
-		return get(a);
+		return fget.apply(a);
 	}
 
 	public Optional<B> get(A a) {
