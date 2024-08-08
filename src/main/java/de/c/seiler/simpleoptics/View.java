@@ -18,7 +18,7 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class View<A, B> extends BaseView<A, B, B> {
+public class View<A, B> extends Fold<A, B, B> {
 
 	public View(Function<A, B> fget) {
 		super(fget, fget.andThen(List::of));

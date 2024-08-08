@@ -6,40 +6,42 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-/**
- * "A lens is basically a getter/setter that can be used for deep updates of
- * immutable data."
- * http://davids-code.blogspot.de/2014/02/immutable-domain-and-lenses-in-java-8.html
- * 
- * @param <A>
- * @param <B>
- */
-public class Fold<A, B> {
+public class Fold<A, B, C> implements Function<A, B> {
 
-	private Function<A, List<B>> fcol;
+	public final Function<A, B> fget;
+	private final Function<A, List<C>> fcol;
 
-	public Fold(Function<A, List<B>> fcol) {
+	public Fold(Function<A, B> fget, Function<A, List<C>> fcol) {
+		this.fget = fget;
 		this.fcol = fcol;
 	}
 
-	public Stream<B> toStream(A a) {
+	public B apply(A a) {
+		return get(a);
+	}
+
+	public B get(A a) {
+		return fget.apply(a);
+	}
+
+	public Stream<C> toStream(A a) {
 		return fcol.apply(a).stream();
 	}
 
-	public List<B> toList(A a) {
+	public List<C> toList(A a) {
 		return fcol.apply(a);
 	}
 
-	public <D, E extends List<D>, ACC> Fold<A, D> fold(Collector<B, ACC, E> collector) {
-		return new Fold<>(a -> toStream(a).collect(collector));
+	public <D, E extends List<D>, ACC> Fold<A, E, D> fold(Collector<C, ACC, E> collector) {
+		return new Fold<>(a -> toStream(a).collect(collector), a -> toStream(a).collect(collector));
 	}
 
-	public <D> Fold<A, D> each(View<B, D> v) {
-		return new Fold<>(a -> toStream(a).map(v).toList());
+	public <D> Fold<A, List<D>, D> each(View<C, D> v) {
+		return new Fold<>(a -> toStream(a).map(v).toList(), a -> toStream(a).map(v).toList());
 	}
 
-	public Fold<A, B> filter(Predicate<B> pred) {
-		return new Fold<>(a -> toStream(a).filter(pred).toList());
+	public  Fold<A,List<C>, C> filter(Predicate<C> pred) {
+		return new Fold<>(a -> toStream(a).filter(pred).toList(), a -> toStream(a).filter(pred).toList());
 	}
 
 }

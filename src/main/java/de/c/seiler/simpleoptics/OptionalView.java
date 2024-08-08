@@ -1,6 +1,5 @@
 package de.c.seiler.simpleoptics;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -16,18 +15,16 @@ import de.c.seiler.simpleoptics.primitive.OptionalLongView;
  * @param <A>
  * @param <B>
  */
-public class OptionalView<A, B> extends Fold<A, B> implements Function<Optional<A>, Optional<B>> {
+public class OptionalView<A, B> extends Fold<Optional<A>, Optional<B>, B> {
 
-	public final Function<Optional<A>, Optional<B>> fget;
 
 	public OptionalView(View<A, B> view) {
-		super(view.fget.andThen(List::of));
-		this.fget = oa -> oa.flatMap(a -> Optional.ofNullable(view.fget.apply(a)));
+		super(oa -> oa.flatMap(a -> Optional.ofNullable(view.fget.apply(a))), 
+				oa -> oa.map(a -> view.fget.apply(a)).or(Optional::empty).stream().toList());
 	}
 
 	public OptionalView(Function<Optional<A>, Optional<B>> fget) {
-		super(a -> fget.apply(Optional.ofNullable(a)).stream().toList());
-		this.fget = fget;
+		super(fget, a -> fget.apply(a).stream().toList());
 	}
 
 	public Optional<B> get(Optional<A> a) {

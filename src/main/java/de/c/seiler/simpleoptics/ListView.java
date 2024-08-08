@@ -11,7 +11,7 @@ import java.util.function.Function;
  * @param <A>
  * @param <B>
  */
-public class ListView<A, C> extends BaseView<A, List<C>, C> {
+public class ListView<A, C> extends Fold<A, List<C>, C> {
 
 	public ListView(Function<A, List<C>> fcol) {
 		super(fcol, fcol);
